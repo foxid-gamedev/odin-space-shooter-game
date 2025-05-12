@@ -108,7 +108,7 @@ player_update :: proc(player: ^Actor, delta: f32) {
 BULLET_SPEED :: 1000
 
 _default_bullet_shape : CircleShape = {
-    radius = 16,
+    radius = 8,
     color = rl.GOLD,
 }
 
@@ -124,12 +124,9 @@ bullet_spawn :: proc(pos: vector2, dir: vector2) -> Actor {
 }
 
 bullet_update :: proc(bullet: ^Actor) {
+    if !bullet.active do return
 
-    // TOOD: undo draw cmd (just for testing)
-    rl.DrawRectangleLines(100, 100, SCREEN_WIDTH-200, SCREEN_HEIGHT-200, rl.YELLOW)
-
-    if bullet.active && !actor_is_inside_screen(bullet^, -100) {
+    if bullet.active && !actor_is_inside_screen(bullet^) {
         bullet.active = false
-        fmt.println("bullet hit at: ", bullet.position)
     }
 }

@@ -24,6 +24,7 @@ OBSTACLE_TIME :: 1.0
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 g_active_actors : [dynamic]^Actor
 g_running : bool = true
+g_score : i32 = 0
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Entry Point
@@ -43,7 +44,7 @@ main :: proc() {
     shoot_timer : f32 = 0.0
     obstacle_spawn_timer : f32 = 0.0
 
-    for g_running {
+    for g_running && !rl.WindowShouldClose() {
         // delta time //
         delta : f32 = rl.GetFrameTime()
         shoot_timer -= delta
@@ -67,7 +68,6 @@ main :: proc() {
                 sx := rand.float32_range(100, SCREEN_WIDTH-100)
                 sy := rand.float32_range(0, 200)
                 obstacles[obstacle_index] = obstacle_spawn({sx, sy})
-                fmt.println("spawned obstacle at: ", vector2{sx, sy})
             }
     
             // rather wait the same amount again when everything is occupied
@@ -127,7 +127,8 @@ main :: proc() {
             }
             
             // ui //
-            rl.DrawText("Score: 0", 10, 10, 32, rl.WHITE)
+            score_str := fmt.ctprint("Score:", g_score, "| Player Health:", player.health)
+            rl.DrawText(score_str, 10, 10, 40, rl.WHITE)
         rl.EndDrawing()
 
         // free memory //
@@ -143,4 +144,8 @@ game_get_active_actors :: proc() -> []^Actor {
 send_game_over :: proc() {
     fmt.print("Game Over")
     g_running = false
+}
+
+game_add_score :: proc(score: i32) {
+    g_score += score
 }

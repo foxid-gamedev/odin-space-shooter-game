@@ -37,6 +37,8 @@ actor_update :: proc(actor: ^Actor, delta: f32) {
 
     #partial switch actor.type {
         case .Obstacle: obstacle_update(actor, delta)
+        case .Bullet_Player: bullet_update(actor)
+        case .Bullet_Enemy: bullet_update(actor)
     }
 }
 
@@ -207,6 +209,7 @@ bullet_update :: proc(bullet: ^Actor) {
 OBSTACLE_SPEED :: 350
 OBSTACLE_DAMAGE :: 35
 OBSTACLE_RADIUS :: 24
+OBSTACLE_SCORE :: 5
 
 obstacle_spawn :: proc(pos: vector2) -> Actor {
     return {
@@ -237,7 +240,7 @@ obstacle_update :: proc(actor: ^Actor, delta: f32) {
             if actor_check_collision_actor(actor^, other_actor^) {
                 actor.active = false
                 actor.visible = false
-                fmt.println("obstacle destroyed at: ", actor.position)
+                game_add_score(OBSTACLE_SCORE)
                 break
             }
         }
@@ -245,7 +248,6 @@ obstacle_update :: proc(actor: ^Actor, delta: f32) {
             if actor_check_collision_actor(actor^, other_actor^) {
                 actor.active = false
                 actor.visible = false
-                fmt.println("obstacle hit player at: ", actor.position)
                 actor_take_damage(other_actor, actor.damage)
             }
         }

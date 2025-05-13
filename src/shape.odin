@@ -2,6 +2,9 @@ package game
 
 import rl "vendor:raylib"
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Shapes
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 CircleShape :: struct { 
     radius: f32, 
     color: Maybe(rl.Color), 
@@ -12,13 +15,11 @@ RectShape :: struct {
     color: Maybe(rl.Color), 
 }
 
-// unions //
 Shape :: union { 
     CircleShape,
     RectShape 
 }
 
-// procedures //
 shape_draw :: proc(position: vector2, shape: Shape) {
     switch s in shape {
         case CircleShape: rl.DrawCircle(

@@ -77,14 +77,14 @@ main :: proc() {
         // Get all active actors // 
         g_active_actors = make_dynamic_array([dynamic]^Actor, allocator = context.temp_allocator)
         
-        if player.active {
-            append(&g_active_actors, &player)
-        }
-        
         for &bullet in bullets {
             if bullet.active {
                 append(&g_active_actors, &bullet)
             }
+        }
+
+        if player.active {
+            append(&g_active_actors, &player)
         }
 
         for &obstacle in obstacles {
